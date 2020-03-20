@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,9 +18,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try{
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }catch(Exception ignore){}
-
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
         View decorView = getWindow().getDecorView();
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         //Se quita el getWindow porque no hace falta en el onResume
         try{
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }catch(Exception ignore){}
 
         View decorView = getWindow().getDecorView();
@@ -72,7 +73,5 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
     }
-}
-
 
 }

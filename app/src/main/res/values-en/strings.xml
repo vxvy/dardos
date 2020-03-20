@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Darts</string>
+    <string name="btn_play">Play</string>
+    <string name="btn_options">Options</string>
+    <string name="btn_scores">Scores</string>
+    <string name="btn_help">Help</string>
+    <string name="msg_exit">Do you really wanna exit?</string>
+    <string name="btn_newgame">New Game</string>
+    <string name="btn_continue">Continue</string>
+    <string name="opt_music">Music:</string>
+    <string name="opt_soundeffects">"Sound effects: "</string>
+    <string name="opt_vibration">"Vibration: "</string>
+    <string name="ptd_lifenumb">"Life number: "</string>
+    <string name="ptd_time">"Time: "</string>
+    <string name="ptd_spatk">Special Atack %:</string>
+    <string name="ptd_sceenid">"Sceen id: "</string>
+    <string name="msg_gameover">Game Over</string>
+    <string name="btn_credits">Credits</string>
+</resources>

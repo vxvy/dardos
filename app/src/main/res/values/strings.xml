@@ -1,3 +1,29 @@
 <resources>
-    <string name="app_name">Dardos</string>
+
+    <string name="btn_play">Play</string>
+    <string name="btn_options">Options</string>
+    <string name="btn_scores">Scores</string>
+    <string name="btn_help">Help</string>
+    <string name="msg_exit">Exit</string>
+    <string name="btn_newgame">New Game</string>
+    <string name="btn_continue">Continue</string>
+    <string name="opt_music">"Music: "</string>
+    <string name="opt_soundeffects">Sound effects:</string>
+    <string name="opt_vibration">Vibration:</string>
+    <string name="ptd_lifenumb">Life number:</string>
+    <string name="ptd_posx" translatable="false">Pos X:</string>
+    <string name="ptd_posy" translatable="false">Pos Y:</string>
+    <string name="ptd_time">Time:</string>
+    <string name="ptd_spatk">Special Atack %:</string>
+    <string name="ptd_sceenid">"Sceen Id: "</string>
+    <string name="ptd_powerup" translatable="false">PowerUp:</string>
+    <string name="opt_music_on_ico" translatable="false">&#xf028;</string>
+    <string name="opt_music_off_ico" translatable="false">&#xf6a9;</string>
+    <string name="opt_soundeffects_on_ico" translatable="false">&#xf130;</string>
+    <string name="opt_soundeffects_off_ico" translatable="false">&#xf131;</string>
+    <string name="opt_vibration_on_ico" translatable="false">&#xf205;</string>
+    <string name="opt_vibration_off_ico" translatable="false">&#xf204;</string>
+    <string name="msg_gameover">Game Over</string>
+    <string name="app_name">Darts</string>
+    <string name="btn_credits">Credits</string>
 </resources>

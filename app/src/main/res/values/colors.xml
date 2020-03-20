@@ -3,4 +3,10 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="greeny">#4A984D</color>
+    <color name="greenyhard">#164017</color>
+    <color name="papiro1">#C89548</color>
+    <color name="papiro2">#5C3C0C</color>
+    <color name="colisionNo">#0FC316</color>
+    <color name="colisionYes">#FF0000</color>
 </resources>
