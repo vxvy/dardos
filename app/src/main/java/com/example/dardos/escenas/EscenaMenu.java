@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 import static com.example.dardos.codeUtils.Constantes.ESCENA_CREDITOS_VALUE;
 import static com.example.dardos.codeUtils.Constantes.ESCENA_JUGAR_VALUE;
-import static com.example.dardos.codeUtils.Constantes.ESCENA_OPCIONES_VALUE;
+import static com.example.dardos.codeUtils.Constantes.ESCENA_SALIR_VALUE;
 
 
 public class EscenaMenu extends EsquemaEscena {
@@ -80,9 +80,9 @@ public class EscenaMenu extends EsquemaEscena {
                         auxH*2,auxV*8,
                         Color.TRANSPARENT,
                         true,
-                        context.getString(R.string.btn_options),
+                        context.getString(R.string.btn_exit),
                         context.getColor(R.color.papiro1),
-                        ESCENA_OPCIONES_VALUE));
+                        ESCENA_SALIR_VALUE));
 
         this.bmFondo = RecursosCodigo.getBitmapFromAssets(context,AssetsPaths.BACKGROUND01_BROWN_PATH);
         bmFondo = Bitmap.createScaledBitmap(

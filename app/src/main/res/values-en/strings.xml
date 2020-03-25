@@ -5,7 +5,7 @@
     <string name="btn_options">Options</string>
     <string name="btn_scores">Scores</string>
     <string name="btn_help">Help</string>
-    <string name="msg_exit">Do you really wanna exit?</string>
+    <string name="msg_exit">Exit?</string>
     <string name="btn_newgame">New Game</string>
     <string name="btn_continue">Continue</string>
     <string name="opt_music">Music:</string>
@@ -17,4 +17,6 @@
     <string name="ptd_sceenid">"Sceen id: "</string>
     <string name="msg_gameover">Game Over</string>
     <string name="btn_credits">Credits</string>
+    <string name="btn_salir_si">Yes</string>
+    <string name="btn_exit">Exit</string>
 </resources>

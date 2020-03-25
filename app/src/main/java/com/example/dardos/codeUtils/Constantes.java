@@ -26,6 +26,13 @@ public class Constantes {
     public static final String PARTIDA_POWERUP =
             MainActivity.context.getResources().getString(R.string.ptd_powerup);
 
+
+    public static final String BTN_TEXT_Y =
+            MainActivity.context.getResources().getString(R.string.btn_salir_si);
+    public static final String BTN_TEXT_N =
+            MainActivity.context.getResources().getString(R.string.btn_salir_no);
+
+
     //nombre de los datos guardados en FICHERO_SP_OPCIONES
     public static String OPCIONES_MUSICA =
             MainActivity.context.getResources().getString(R.string.opt_music);
@@ -37,7 +44,7 @@ public class Constantes {
     //ids de las escenas
     public static final int ESCENA_MENU_VALUE = 0;
     public static final int ESCENA_JUGAR_VALUE = 1;
-    public static final int ESCENA_OPCIONES_VALUE = 2;
+    public static final int ESCENA_SALIR_VALUE = 2;
     public static final int ESCENA_RECORDS_VALUE = 3;
     public static final int ESCENA_AYUDA_VALUE = 4;
     public static final int ESCENA_CREDITOS_VALUE = 5;
@@ -48,10 +55,8 @@ public class Constantes {
 
     //ids de las opciones
     public static final int OPCIONES_MUSICA_ID = 111;
-    public static final int OPCIONES_SONIDOS_ID = 222;
-    public static final int OPCIONES_VIBRACION_ID = 333;
-
-
+    public static final int BTN_SALIDA_YES_ID = 222;
+    public static final int BTN_SALIDA_NO_ID = 333;
 
     //relaciones de etamaño adaptativas
     public static final int SPRITES_ESCALA = 3; //TODO editar esto cuando sea

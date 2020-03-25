@@ -12,7 +12,7 @@ import com.example.dardos.escenas.EscenaCreditos;
 import com.example.dardos.escenas.EscenaJuego;
 import com.example.dardos.escenas.EscenaGameOver;
 import com.example.dardos.escenas.EscenaMenu;
-import com.example.dardos.escenas.EscenaOpciones;
+import com.example.dardos.escenas.EscenaPopSalida;
 import com.example.dardos.escenas.EsquemaEscena;
 
 public class EscenaEnPantalla extends SurfaceView implements SurfaceHolder.Callback {
@@ -87,8 +87,8 @@ public class EscenaEnPantalla extends SurfaceView implements SurfaceHolder.Callb
                     case Constantes.ESCENA_AYUDA_VALUE:
                         escena = new EscenaAyuda(context, nuevaEscena, anchoPantalla, altoPantalla);
                         break;
-                    case Constantes.ESCENA_OPCIONES_VALUE:
-                        escena = new EscenaOpciones(context, nuevaEscena, anchoPantalla, altoPantalla);
+                    case Constantes.ESCENA_SALIR_VALUE:
+                        escena = new EscenaPopSalida(context, nuevaEscena, anchoPantalla, altoPantalla);
                         break;
                     case Constantes.ESCENA_CREDITOS_VALUE:
                         escena = new EscenaCreditos(context, nuevaEscena, anchoPantalla, altoPantalla);
