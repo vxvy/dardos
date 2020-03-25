@@ -3,6 +3,7 @@ package com.example.dardos.escenas;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -33,7 +34,7 @@ public class EsquemaEscena {
                 0,
                 anchoPantalla,
                 anchoPantalla/9,
-                context.getColor(R.color.papiro2), true, bmLogoBtnAtras, Constantes.ESCENA_MENU_VALUE
+                Color.WHITE, true, bmLogoBtnAtras, Constantes.ESCENA_MENU_VALUE
         );
     }
 

@@ -2,12 +2,7 @@
 <resources>
     <string name="app_name">Darts</string>
     <string name="btn_play">Jugar</string>
-    <string name="btn_options">Opciones</string>
-    <string name="btn_scores">Records</string>
-    <string name="btn_help">Ayuda</string>
     <string name="msg_exit">¿Salir?</string>
-    <string name="btn_newgame">Juego Nuevo</string>
-    <string name="btn_continue">Continuar</string>
     <string name="opt_music">"Música: "</string>
     <string name="opt_soundeffects">"Efectos de sonido: "</string>
     <string name="opt_vibration">"Vibración: "</string>
@@ -19,4 +14,7 @@
     <string name="btn_credits">Créditos</string>
     <string name="btn_salir_si">Sí</string>
     <string name="btn_exit">Salir</string>
+    <string name="credits_author">Autor</string>
+    <string name="credits_music">Recursos musicales:</string>
+    <string name="credits_images">Recursos gráficos:</string>
 </resources>

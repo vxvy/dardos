@@ -7,6 +7,12 @@
     <color name="greenyhard">#164017</color>
     <color name="papiro1">#C89548</color>
     <color name="papiro2">#5C3C0C</color>
+    <color name="diana5">#1D12BC</color>
+    <color name="diana4">#009688</color>
+    <color name="diana3">#DA560E</color>
+    <color name="diana2">#6FAF09</color>
+    <color name="diana1">#D32913</color>
+    <color name="letrasCreditos">#FFC107</color>
     <color name="colisionNo">#0FC316</color>
     <color name="colisionYes">#FF0000</color>
 </resources>
