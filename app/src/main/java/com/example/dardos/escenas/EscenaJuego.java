@@ -3,60 +3,103 @@ package com.example.dardos.escenas;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.Log;
 import android.view.MotionEvent;
 
 import com.example.dardos.R;
 import com.example.dardos.codeUtils.AssetsPaths;
+import com.example.dardos.codeUtils.Constantes;
 import com.example.dardos.codeUtils.RecursosCodigo;
-import com.example.dardos.elementos.Boton;
-
-import java.util.ArrayList;
-import java.util.TimerTask;
 
 import static com.example.dardos.codeUtils.AssetsPaths.BACKGROUND03_MAINGAME_PATH;
-import static com.example.dardos.codeUtils.Constantes.ESCENA_CARGAR_JUEGO;
-import static com.example.dardos.codeUtils.Constantes.ESCENA_GAME_OVER;
-import static com.example.dardos.codeUtils.Constantes.ESCENA_JUEGO_NIVEL_1_VALUE;
-
-
-// Esta clase pasará a ser un lanzador para la partida,
-// aquí se instanciará el timer que compartirán los distintos niveles.
-
-//El timer se instanció en el main porque si no
-// no podía ser accedido por el onResume y otros métodos fácilmente
-
-//Va a haber dos botones, "Nueva partida" y "Continuar"
-
-// Con más tiempo se podría plantear poner dibujitos representativos del estado de la partida aquí
-
-//Este sub-menú tendrá un fondo de parallax
+import static com.example.dardos.codeUtils.Constantes.DIFF_EASY;
+import static com.example.dardos.codeUtils.Constantes.DIFF_EASY_VEL;
+import static com.example.dardos.codeUtils.Constantes.DIFF_HARD;
+import static com.example.dardos.codeUtils.Constantes.DIFF_HARD_VEL;
+import static com.example.dardos.codeUtils.Constantes.DIFF_MED;
+import static com.example.dardos.codeUtils.Constantes.DIFF_MED_VEL;
 
 public class EscenaJuego extends EsquemaEscena {
 
-
     public Context context;
 
+    //velocidades
+    public int velDardoX;
+    public int velDardoXActual;
+    public int velDardoY;
+
+    //tamaño dianas
     public float radCircle1; //interior
     public float radCircle2; //
     public float radCircle3; //
     public float radCircle4; //
     public float radCircle5; //exterior
 
+    //paint para todo_
     public Paint circlePaint;
 
+    //bm de assets
     public Bitmap dart;
     public Bitmap cross;
     public Bitmap bmFondo;
 
+    //proporciones que se usan en esta pantalla de carga
     public int auxH;
     public int auxV;
 
-    public EscenaJuego(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
+    //Movimientos del dardo
+    public boolean dardoMovH;
+    public boolean dardoLanzar;
+    public boolean finLanzamiento;
+    public boolean aumentaX;
+
+    //pos dardo
+    public int dartPosXi;
+    public int dartPosXf;
+    public int dartPosYi;
+    public int dartPosYf;
+    public Rect dartRect;
+
+    //pos cruceta
+    public int crossPosXi;
+    public int crossPosXf;
+    public int crossPosYi;
+    public int crossPosYf;
+    public Rect crossRect;
+
+    //num lanzamientos
+    public int numLanzamientos;
+
+
+    public EscenaJuego(Context context, int idEscena, int anchoPantalla, int altoPantalla, int lvlDif) {
         super(context, idEscena, anchoPantalla, altoPantalla);
         this.context = context;
+
+        //el dardo empieza desplazándose hacia la derecha
+        this.aumentaX = true;
+        this.dardoMovH = true;
+        this.dardoLanzar = false;
+
+        //Velocidades
+        switch (lvlDif){
+            case DIFF_EASY:
+                this.velDardoX = DIFF_EASY_VEL;
+                this.velDardoXActual = DIFF_EASY_VEL;
+                break;
+            case DIFF_MED:
+                this.velDardoX = DIFF_MED_VEL;
+                this.velDardoXActual = DIFF_MED_VEL;
+                break;
+            case DIFF_HARD:
+                this.velDardoX = DIFF_HARD_VEL;
+                this.velDardoXActual = DIFF_HARD_VEL;
+                break;
+        }
+        velDardoY = 0;
+
+        this.numLanzamientos = 5;
 
         this.auxH = anchoPantalla/12;
         this.auxV = altoPantalla/3;
@@ -69,14 +112,31 @@ public class EscenaJuego extends EsquemaEscena {
 
         this.circlePaint = new Paint();
 
-        dart = RecursosCodigo.getBitmapFromAssets(context,AssetsPaths.DART_BM);
-        dart = Bitmap.createScaledBitmap(dart, auxH, auxH*2, false);
+        this.dart = RecursosCodigo.getBitmapFromAssets(context,AssetsPaths.DART_BM);
+        this.dart = Bitmap.createScaledBitmap(dart, auxH, auxH*2, false);
 
-        cross = RecursosCodigo.getBitmapFromAssets(context,AssetsPaths.DART_THROW_BM);
-        cross = Bitmap.createScaledBitmap(cross,auxH/2,auxH/2,false);
+        this.dartPosXi=(auxH*6)-(this.dart.getWidth()/2);
+        this.dartPosXf=this.dartPosXi+dart.getWidth();
+        this.dartPosYi=(auxV*3)-(this.dart.getHeight()/2) - auxH;
+        this.dartPosYf=this.dartPosYi+dart.getHeight();
+        this.dartRect = new Rect(
+                dartPosXi,dartPosYi,
+                dartPosXf,dartPosYf);
 
-        bmFondo = RecursosCodigo.getBitmapFromAssets(context,BACKGROUND03_MAINGAME_PATH);
-        bmFondo = Bitmap.createScaledBitmap(bmFondo,anchoPantalla,altoPantalla,false);
+
+        this.cross = RecursosCodigo.getBitmapFromAssets(context,AssetsPaths.DART_THROW_BM);
+        this.cross = Bitmap.createScaledBitmap(cross,auxH/2,auxH/2,false);
+
+        this.crossPosXi=(auxH*6)-(this.cross.getWidth()/2);
+        this.crossPosXf=this.crossPosXi+cross.getWidth();
+        this.crossPosYi=auxV - (this.cross.getHeight()/2);
+        this.crossPosYf=this.crossPosYi+cross.getHeight();
+        this.crossRect = new Rect(
+                dartPosXi,dartPosYi,
+                dartPosXf,dartPosYf);
+
+        this.bmFondo = RecursosCodigo.getBitmapFromAssets(context,BACKGROUND03_MAINGAME_PATH);
+        this.bmFondo = Bitmap.createScaledBitmap(bmFondo,anchoPantalla,altoPantalla,false);
     }
 
     @Override
@@ -104,20 +164,102 @@ public class EscenaJuego extends EsquemaEscena {
         circlePaint.setColor(context.getColor(R.color.diana1));
         c.drawCircle(auxH*6, auxV, radCircle1, circlePaint);
 
-        c.drawBitmap(this.cross, (auxH*6)-(this.cross.getWidth()/2), auxV - (this.cross.getHeight()/2), null);
+        c.drawBitmap(this.dart,
+                 this.dartPosXi,
+                 this.dartPosYi,
+                null);
 
-        c.drawBitmap(this.dart, (auxH*6)-(this.cross.getWidth()/2), (auxV*3)-(this.cross.getHeight()*2) - auxH, null);
+        c.drawBitmap(this.cross,
+                 this.crossPosXi,
+                 this.crossPosYi,
+                null);
 
         super.escenaDibuja(c);
     }
 
+    /**
+     * Se lanza el dardo cuando se toca en el tercio inferior
+     * de la pantalla dispuesta en vertical
+     * @param event
+     * @return en caso de pulsar el botón "atrás", se vuelve al menú principal
+     */
     @Override
     public int onTouchEvent(MotionEvent event) {
+        if(event.getY() > auxV*2){
+            this.dardoLanzar = true;
+            this.dardoMovH = false;
+        }
         return super.onTouchEvent(event);
     }
 
     @Override
     public void escenaActFisicas() {
 
+        //mientras está lanzando
+//        if(this.dardoLanzar){
+//            this.velDardoXActual = 0;
+//            this.velDardoY = Constantes.VERTICAL_VEL;
+////
+////            //mueve dardo
+////            //la parte de arriba del dardo y la de abajo de la cruz
+//            if((this.dartPosYi -= velDardoY) <= this.crossPosYf/2){
+//                this.dartPosYi -= velDardoY;
+//                this.dartPosYf -= velDardoY;
+//            }
+//            else{
+//                //aquí va el sleep para ver cómo el dardo impacta
+//
+//                this.velDardoY = 0;
+////                this.dardoLanzar = false;           //termina el lanzamiento del dado
+//                this.numLanzamientos--;             //pierdes un tiro
+//            }
+//        }
+//        //mientras se está desplazando horizontalmente
+//        else{
+//            //mueve dardo de derecha a izquierda
+//            if(this.aumentaX){
+//                if((this.dartPosXf += velDardoXActual) <= anchoPantalla){
+            if(this.aumentaX){
+                this.dartPosXi += velDardoXActual;
+                this.dartPosXf += velDardoXActual;
+
+                //mueve cruz
+                this.crossPosXi += velDardoXActual;
+                this.crossPosXf += velDardoXActual;
+
+                //si en la siguiente iteración va a superar el ancho
+                //determina que es momento de retroceder
+                Log.d("WHY",
+                        "this.dartPosXf += velDardoXActual "+ (this.dartPosXf += velDardoXActual)
+                        +"\n anchoPantalla "+anchoPantalla);
+                if((this.dartPosXf += velDardoXActual) >= anchoPantalla){
+                    this.aumentaX = false;
+                }
+            }
+//            else{
+//                if((this.dartPosXi -= velDardoXActual) >= 0){
+//                this.dartPosXi -= velDardoXActual;
+//                this.dartPosXf -= velDardoXActual;
+//
+//                //mueve cruz
+//                this.crossPosXi -= velDardoXActual;
+//                this.crossPosXf -= velDardoXActual;
+//                if((this.dartPosXf -= velDardoXActual) <= 0){
+//                    this.aumentaX = true;
+//                }
+//            }
+//        }
+
+        //comprueba en qué círculo ha dado el dardo
+
+//
+//        if(this.dartPosYi >= this.crossPosYi){
+//            finLanzamiento = true;
+//        }
+//
+//        if(finLanzamiento){
+//            this.velDardoY = 0;
+//            this.velDardoX = 0;
+//        }
     }
 }

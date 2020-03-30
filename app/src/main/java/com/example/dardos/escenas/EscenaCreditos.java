@@ -69,7 +69,7 @@ public class EscenaCreditos extends EsquemaEscena {
         c.drawText( context.getString(R.string.credits_images),auxH, auxV*10, fontPaint);
         c.drawText(creditosImagenes1, auxH, auxV*12, fontPaint);
         c.drawText(creditosImagenes2, auxH, auxV*14, fontPaint);
-        c.drawText( context.getString(R.string.credits_author),auxH, auxV*16, fontPaint);
+        c.drawText( context.getString(R.string.credits_productor),auxH, auxV*16, fontPaint);
         c.drawText(creditosProductor, auxH, auxV*18, fontPaint);
 
         super.escenaDibuja(c);

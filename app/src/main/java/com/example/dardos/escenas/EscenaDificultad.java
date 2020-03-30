@@ -15,12 +15,12 @@ import com.example.dardos.elementos.Boton;
 
 import java.util.ArrayList;
 
-import static com.example.dardos.codeUtils.Constantes.ESCENA_CREDITOS_VALUE;
-import static com.example.dardos.codeUtils.Constantes.ESCENA_DIFICULTAD_VALUE;
-import static com.example.dardos.codeUtils.Constantes.ESCENA_SALIR_VALUE;
+import static com.example.dardos.codeUtils.Constantes.ESCENA_JUGAR_VALUE_EASY;
+import static com.example.dardos.codeUtils.Constantes.ESCENA_JUGAR_VALUE_HARD;
+import static com.example.dardos.codeUtils.Constantes.ESCENA_JUGAR_VALUE_MED;
 
 
-public class EscenaMenu extends EsquemaEscena {
+public class EscenaDificultad extends EsquemaEscena {
 
     ArrayList<Boton> btnColection;
 
@@ -34,21 +34,21 @@ public class EscenaMenu extends EsquemaEscena {
 
     public Bitmap bmFondo;
 
-    public EscenaMenu(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
+    public EscenaDificultad(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
 
         this.auxV = altoPantalla/9;
         this.auxH = anchoPantalla/3;
 
         //Titulo
-        strTitulo = context.getString(R.string.app_name);
+        strTitulo = context.getString(R.string.diff_title);
         paintTituloFill = new Paint();
-        paintTituloFill.setTextSize(auxV);
+        paintTituloFill.setTextSize(auxV/3);
         paintTituloFill.setTypeface(Typeface.createFromAsset(context.getAssets(), AssetsPaths.FONT_EPIC_PATH));
         paintTituloFill.setColor(Color.BLACK);
         paintTituloFill.setStyle(Paint.Style.FILL);
         paintTituloStroke = new Paint();
-        paintTituloStroke.setTextSize(auxV);
+        paintTituloStroke.setTextSize(auxV/3);
         paintTituloStroke.setTypeface(Typeface.createFromAsset(context.getAssets(), AssetsPaths.FONT_EPIC_PATH));
         paintTituloStroke.setColor(context.getColor(R.color.greenyhard));
         paintTituloStroke.setStyle(Paint.Style.STROKE);
@@ -62,27 +62,27 @@ public class EscenaMenu extends EsquemaEscena {
                         auxH*2, auxV*4,
                         Color.TRANSPARENT,
                         true,
-                        context.getString(R.string.btn_play),
+                        context.getString(R.string.diff_easy),
                         context.getColor(R.color.papiro1),
-                        ESCENA_DIFICULTAD_VALUE));
+                        ESCENA_JUGAR_VALUE_EASY));
         btnColection.add(
                 new Boton(
                         auxH,auxV *5,
                         auxH*2, auxV*6,
                         Color.TRANSPARENT,
                         true,
-                        context.getString(R.string.btn_credits),
+                        context.getString(R.string.diff_med),
                         context.getColor(R.color.papiro2),
-                        ESCENA_CREDITOS_VALUE));
+                        ESCENA_JUGAR_VALUE_MED));
         btnColection.add(
                 new Boton(
                         auxH,auxV*7,
                         auxH*2,auxV*8,
                         Color.TRANSPARENT,
                         true,
-                        context.getString(R.string.btn_exit),
+                        context.getString(R.string.diff_hard),
                         context.getColor(R.color.papiro1),
-                        ESCENA_SALIR_VALUE));
+                        ESCENA_JUGAR_VALUE_HARD));
 
         this.bmFondo = RecursosCodigo.getBitmapFromAssets(context,AssetsPaths.BACKGROUND01_BROWN_PATH);
         bmFondo = Bitmap.createScaledBitmap(

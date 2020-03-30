@@ -9,11 +9,16 @@ import android.view.SurfaceView;
 import com.example.dardos.codeUtils.Constantes;
 import com.example.dardos.escenas.EscenaAyuda;
 import com.example.dardos.escenas.EscenaCreditos;
+import com.example.dardos.escenas.EscenaDificultad;
 import com.example.dardos.escenas.EscenaJuego;
 import com.example.dardos.escenas.EscenaGameOver;
 import com.example.dardos.escenas.EscenaMenu;
 import com.example.dardos.escenas.EscenaPopSalida;
 import com.example.dardos.escenas.EsquemaEscena;
+
+import static com.example.dardos.codeUtils.Constantes.DIFF_EASY;
+import static com.example.dardos.codeUtils.Constantes.DIFF_HARD;
+import static com.example.dardos.codeUtils.Constantes.DIFF_MED;
 
 public class EscenaEnPantalla extends SurfaceView implements SurfaceHolder.Callback {
     public Context context;
@@ -81,8 +86,17 @@ public class EscenaEnPantalla extends SurfaceView implements SurfaceHolder.Callb
             int nuevaEscena=escena.onTouchEvent(event);
             if(nuevaEscena!=escena.idEscena){
                 switch (nuevaEscena){
-                    case Constantes.ESCENA_JUGAR_VALUE:
-                        escena = new EscenaJuego(context, nuevaEscena, anchoPantalla, altoPantalla);
+                    case Constantes.ESCENA_DIFICULTAD_VALUE:
+                        escena = new EscenaDificultad(context, nuevaEscena, anchoPantalla, altoPantalla);
+                        break;
+                    case Constantes.ESCENA_JUGAR_VALUE_EASY:
+                        escena = new EscenaJuego(context, nuevaEscena, anchoPantalla, altoPantalla, DIFF_EASY);
+                        break;
+                    case Constantes.ESCENA_JUGAR_VALUE_MED:
+                        escena = new EscenaJuego(context, nuevaEscena, anchoPantalla, altoPantalla, DIFF_MED);
+                        break;
+                    case Constantes.ESCENA_JUGAR_VALUE_HARD:
+                        escena = new EscenaJuego(context, nuevaEscena, anchoPantalla, altoPantalla, DIFF_HARD);
                         break;
                     case Constantes.ESCENA_AYUDA_VALUE:
                         escena = new EscenaAyuda(context, nuevaEscena, anchoPantalla, altoPantalla);
@@ -92,10 +106,6 @@ public class EscenaEnPantalla extends SurfaceView implements SurfaceHolder.Callb
                         break;
                     case Constantes.ESCENA_CREDITOS_VALUE:
                         escena = new EscenaCreditos(context, nuevaEscena, anchoPantalla, altoPantalla);
-                        break;
-                    case Constantes.ESCENA_CARGAR_JUEGO:
-                        //Cargar parámetros de shared preferences aquí
-                        escena = new EscenaJuego(context, nuevaEscena, anchoPantalla, altoPantalla);
                         break;
                     case Constantes.ESCENA_GAME_OVER:
                         escena = new EscenaGameOver(context, nuevaEscena, anchoPantalla, altoPantalla);
@@ -123,8 +133,8 @@ public class EscenaEnPantalla extends SurfaceView implements SurfaceHolder.Callb
                     if (!surfaceHolder.getSurface().isValid()) continue; // si la superficie no está preparada repetimos
                     c = surfaceHolder.lockCanvas(); // Obtenemos el lienzo.  La sincronización es necesaria por ser recurso común
                     synchronized (surfaceHolder) {
-                        escena.escenaActFisicas();  // Movimiento de los elementos
-                        escena.escenaDibuja(c);              // Dibujamos los elementos
+                        escena.escenaActFisicas();          // Movimiento de los elementos
+                        escena.escenaDibuja(c);             // Dibujamos los elementos
                     }
                 } finally {  // Haya o no excepción, hay que liberar el lienzo
                     if (c != null) {

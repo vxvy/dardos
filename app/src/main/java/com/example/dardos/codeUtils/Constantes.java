@@ -43,15 +43,24 @@ public class Constantes {
 
     //ids de las escenas
     public static final int ESCENA_MENU_VALUE = 0;
-    public static final int ESCENA_JUGAR_VALUE = 1;
+    public static final int ESCENA_DIFICULTAD_VALUE = 1;
     public static final int ESCENA_SALIR_VALUE = 2;
-    public static final int ESCENA_RECORDS_VALUE = 3;
     public static final int ESCENA_AYUDA_VALUE = 4;
     public static final int ESCENA_CREDITOS_VALUE = 5;
-    public static final int ESCENA_JUEGO_NIVEL_1_VALUE = 6;
-    public static final int ESCENA_JUEGO_NIVEL_JEFE_VALUE = 7;
-    public static final int ESCENA_CARGAR_JUEGO = 8;
     public static final int ESCENA_GAME_OVER = 9;
+    public static final int ESCENA_JUGAR_VALUE_EASY = 10;
+    public static final int ESCENA_JUGAR_VALUE_MED = 11;
+    public static final int ESCENA_JUGAR_VALUE_HARD = 12;
+
+    //velocidades
+    public static final int DIFF_EASY = 1;
+    public static final int DIFF_EASY_VEL = 1;
+    public static final int DIFF_MED = 2;
+    public static final int DIFF_MED_VEL = 2;
+    public static final int DIFF_HARD = 3;
+    public static final int DIFF_HARD_VEL = 3;
+
+    public static final int VERTICAL_VEL = 5;
 
     //ids de las opciones
     public static final int OPCIONES_MUSICA_ID = 111;

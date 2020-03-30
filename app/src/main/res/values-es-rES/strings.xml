@@ -17,4 +17,8 @@
     <string name="credits_author">Autor</string>
     <string name="credits_music">Recursos musicales:</string>
     <string name="credits_images">Recursos gráficos:</string>
+    <string name="diff_title">Selecciona dificultad:</string>
+    <string name="diff_easy">Fácil</string>
+    <string name="diff_med">Media</string>
+    <string name="diff_hard">Difícil</string>
 </resources>
