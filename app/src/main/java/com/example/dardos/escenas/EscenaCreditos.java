@@ -19,6 +19,8 @@ public class EscenaCreditos extends EsquemaEscena {
     public int auxH;
     public int auxV;
 
+    public int scrollV;
+
     public String creditosJuego;
     public String creditosMusica;
     public String creditosImagenes1;
@@ -73,5 +75,10 @@ public class EscenaCreditos extends EsquemaEscena {
         c.drawText(creditosProductor, auxH, auxV*18, fontPaint);
 
         super.escenaDibuja(c);
+    }
+
+    @Override
+    public void escenaActFisicas() {
+        super.escenaActFisicas();
     }
 }
