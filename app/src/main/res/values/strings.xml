@@ -18,7 +18,7 @@
     <string name="opt_soundeffects_off_ico" translatable="false">&#xf131;</string>
     <string name="opt_vibration_on_ico" translatable="false">&#xf205;</string>
     <string name="opt_vibration_off_ico" translatable="false">&#xf204;</string>
-    <string name="msg_gameover">Game Over</string>
+    <string name="msg_gameover">"Game ended, your puntuation is: "</string>
     <string name="app_name">Darts</string>
     <string name="btn_credits">Credits</string>
     <string name="btn_salir_si">Yes</string>

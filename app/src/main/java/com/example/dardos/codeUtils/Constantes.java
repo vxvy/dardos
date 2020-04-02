@@ -60,7 +60,7 @@ public class Constantes {
     public static final int DIFF_HARD = 3;
     public static final int DIFF_HARD_VEL = 3;
 
-    public static final int VERTICAL_VEL = 5;
+    public static final int VERTICAL_VEL = MainActivity.context.getResources().getDisplayMetrics().heightPixels/24;
 
     //ids de las opciones
     public static final int OPCIONES_MUSICA_ID = 111;

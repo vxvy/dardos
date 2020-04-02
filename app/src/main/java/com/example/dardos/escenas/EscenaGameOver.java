@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 
 import com.example.dardos.R;
 import com.example.dardos.codeUtils.AssetsPaths;
+import com.example.dardos.codeUtils.Constantes;
 import com.example.dardos.codeUtils.RecursosCodigo;
 
 
@@ -18,26 +19,30 @@ public class EscenaGameOver extends EsquemaEscena {
     public int auxH;
     public int auxV;
 
-    public EscenaGameOver(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
+    public int puntuacion;
+
+    public EscenaGameOver(Context context, int idEscena, int anchoPantalla, int altoPantalla, int puntuacion) {
         super(context, idEscena, anchoPantalla, altoPantalla);
 
         this.auxH = anchoPantalla/15;
-        this.auxV = altoPantalla/2;
+        this.auxV = altoPantalla/3;
 
         fontPaint = new Paint();
-        fontPaint.setStyle(Paint.Style.STROKE);
-        fontPaint.setTextSize(altoPantalla/3);
-        fontPaint.setColor(context.getColor(R.color.greenyhard));
+        fontPaint.setStyle(Paint.Style.FILL);
+        fontPaint.setTextSize(auxH);
+        fontPaint.setColor(context.getColor(R.color.colisionYes));
         fontPaint.setTypeface(Typeface.createFromAsset(context.getAssets(), AssetsPaths.FONT_MAIN_TITLE_PATH));
+
+        this.puntuacion = puntuacion;
     }
 
     @Override
     public void escenaDibuja(Canvas c) {
-        c.drawRect(0,0,anchoPantalla,altoPantalla,new Paint());
+        c.drawRect(0,auxV,anchoPantalla,auxV*2,new Paint());
         c.drawText(
-                context.getString(R.string.msg_gameover),
-                auxH*3,
-                auxV,
+                context.getString(R.string.msg_gameover)+puntuacion,
+                auxH,
+                auxV + (auxV/2),
                 fontPaint
         );
     }
@@ -45,6 +50,6 @@ public class EscenaGameOver extends EsquemaEscena {
     @Override
     public int onTouchEvent(MotionEvent event) {
         RecursosCodigo.espera(3000);
-        return 0;
+        return Constantes.ESCENA_MENU_VALUE;
     }
 }

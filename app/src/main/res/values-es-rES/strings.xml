@@ -10,7 +10,7 @@
     <string name="ptd_time">"Tiempo: "</string>
     <string name="ptd_spatk">Ataque especial %:</string>
     <string name="ptd_sceenid">"Id escena: "</string>
-    <string name="msg_gameover">Has perdido</string>
+    <string name="msg_gameover">Ha temrinado el juego, puntuación:</string>
     <string name="btn_credits">Créditos</string>
     <string name="btn_salir_si">Sí</string>
     <string name="btn_exit">Salir</string>

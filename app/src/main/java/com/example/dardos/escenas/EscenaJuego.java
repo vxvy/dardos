@@ -3,11 +3,13 @@ package com.example.dardos.escenas;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import com.example.dardos.EscenaEnPantalla;
 import com.example.dardos.R;
 import com.example.dardos.codeUtils.AssetsPaths;
 import com.example.dardos.codeUtils.Constantes;
@@ -20,6 +22,7 @@ import static com.example.dardos.codeUtils.Constantes.DIFF_HARD;
 import static com.example.dardos.codeUtils.Constantes.DIFF_HARD_VEL;
 import static com.example.dardos.codeUtils.Constantes.DIFF_MED;
 import static com.example.dardos.codeUtils.Constantes.DIFF_MED_VEL;
+import static com.example.dardos.codeUtils.Constantes.ESCENA_GAME_OVER;
 
 public class EscenaJuego extends EsquemaEscena {
 
@@ -71,7 +74,7 @@ public class EscenaJuego extends EsquemaEscena {
 
     //num lanzamientos
     public int numLanzamientos;
-
+    public static int puntuacion;
 
     public EscenaJuego(Context context, int idEscena, int anchoPantalla, int altoPantalla, int lvlDif) {
         super(context, idEscena, anchoPantalla, altoPantalla);
@@ -81,6 +84,7 @@ public class EscenaJuego extends EsquemaEscena {
         this.aumentaX = true;
         this.dardoMovH = true;
         this.dardoLanzar = false;
+        this.finLanzamiento = true;
 
         //Velocidades
         switch (lvlDif){
@@ -97,10 +101,13 @@ public class EscenaJuego extends EsquemaEscena {
                 this.velDardoXActual = DIFF_HARD_VEL;
                 break;
         }
-        velDardoY = 0;
+        velDardoY = Constantes.VERTICAL_VEL;
 
+        //puntuación jugador
         this.numLanzamientos = 5;
+        this.puntuacion = 0;
 
+        //propiedades pantalla
         this.auxH = anchoPantalla/12;
         this.auxV = altoPantalla/3;
 
@@ -115,6 +122,16 @@ public class EscenaJuego extends EsquemaEscena {
         this.dart = RecursosCodigo.getBitmapFromAssets(context,AssetsPaths.DART_BM);
         this.dart = Bitmap.createScaledBitmap(dart, auxH, auxH*2, false);
 
+        this.cross = RecursosCodigo.getBitmapFromAssets(context,AssetsPaths.DART_THROW_BM);
+        this.cross = Bitmap.createScaledBitmap(cross,auxH/2,auxH/2,false);
+
+        this.setInitialPosForEverything();
+
+        this.bmFondo = RecursosCodigo.getBitmapFromAssets(context,BACKGROUND03_MAINGAME_PATH);
+        this.bmFondo = Bitmap.createScaledBitmap(bmFondo,anchoPantalla,altoPantalla,false);
+    }
+
+    public void setInitialPosForEverything(){
         this.dartPosXi=(auxH*6)-(this.dart.getWidth()/2);
         this.dartPosXf=this.dartPosXi+dart.getWidth();
         this.dartPosYi=(auxV*3)-(this.dart.getHeight()/2) - auxH;
@@ -123,10 +140,6 @@ public class EscenaJuego extends EsquemaEscena {
                 dartPosXi,dartPosYi,
                 dartPosXf,dartPosYf);
 
-
-        this.cross = RecursosCodigo.getBitmapFromAssets(context,AssetsPaths.DART_THROW_BM);
-        this.cross = Bitmap.createScaledBitmap(cross,auxH/2,auxH/2,false);
-
         this.crossPosXi=(auxH*6)-(this.cross.getWidth()/2);
         this.crossPosXf=this.crossPosXi+cross.getWidth();
         this.crossPosYi=auxV - (this.cross.getHeight()/2);
@@ -134,9 +147,6 @@ public class EscenaJuego extends EsquemaEscena {
         this.crossRect = new Rect(
                 dartPosXi,dartPosYi,
                 dartPosXf,dartPosYf);
-
-        this.bmFondo = RecursosCodigo.getBitmapFromAssets(context,BACKGROUND03_MAINGAME_PATH);
-        this.bmFondo = Bitmap.createScaledBitmap(bmFondo,anchoPantalla,altoPantalla,false);
     }
 
     @Override
@@ -147,6 +157,15 @@ public class EscenaJuego extends EsquemaEscena {
         ); //Con esto pinto toda la pantalla de negro para evitar solapamientos raros
 
         c.drawBitmap(bmFondo,0,0,null);
+
+        //dibuja puntuación y tal
+        this.circlePaint.setTextSize(anchoPantalla/15);
+        this.circlePaint.setColor(Color.WHITE);
+        c.drawText("Vidas: "+numLanzamientos,auxH,anchoPantalla/15,circlePaint);
+
+        c.drawText("Puntuación: "+puntuacion,auxH, anchoPantalla/15 *2, circlePaint);
+
+        this.circlePaint = new Paint();
 
 //  Esto quedaría mucho mejor en un bucle, la verdad
         this.circlePaint.setColor(context.getColor(R.color.diana5));
@@ -187,14 +206,94 @@ public class EscenaJuego extends EsquemaEscena {
     public int onTouchEvent(MotionEvent event) {
         if(event.getY() > auxV*2){
             this.dardoLanzar = true;
+            this.finLanzamiento = false;
             this.dardoMovH = false;
+        }
+
+        if(numLanzamientos <= 0){
+            return ESCENA_GAME_OVER;
         }
         return super.onTouchEvent(event);
     }
 
     @Override
     public void escenaActFisicas() {
+        if(dardoLanzar && !finLanzamiento && numLanzamientos > 0){
+            this.dartPosYi-=velDardoY;
+            this.dartPosYf-=velDardoY;
+            if(this.dartPosYi <= (this.crossPosYf - this.dart.getHeight()/2)){
+                this.compruebaDisparo();
+                this.finLanzamiento = true;
+                this.numLanzamientos--;
+                this.setInitialPosForEverything();
+                RecursosCodigo.espera(1000);
+            }
+        }else if(numLanzamientos > 0){
+            if (aumentaX) {
+                this.dartPosXi += velDardoX;
+                this.dartPosXf += velDardoX;
 
+                this.crossPosXi += velDardoX;
+                this.crossPosXf += velDardoX;
 
+                if (this.dartPosXf > anchoPantalla) {
+                    aumentaX = false;
+                }
+            } else {
+                this.dartPosXi -= velDardoX;
+                this.dartPosXf -= velDardoX;
+
+                this.crossPosXi -= velDardoX;
+                this.crossPosXf -= velDardoX;
+
+                if (this.dartPosXi < 0) {
+                    aumentaX = true;
+                }
+            }
+        }else{
+
+        }
+    }
+
+    public void compruebaDisparo(){
+        //la posición central de los círculos corresponde a auxH*6
+        int centroDisparo = dartPosXi - dart.getWidth()/2;
+
+        Log.d("WHERE",
+                "Centro disparo: "+centroDisparo+
+                "\nRango puntuación: " + (auxH*6 - radCircle1) + " - "+ (auxH*6 + radCircle1)+
+                "\nCentro círculo " + auxH*6 + " - radio círculo "+radCircle1
+        );
+
+        if(centroDisparo >= 0 && centroDisparo < auxH
+            || centroDisparo > auxH*9 && centroDisparo <= auxH*10){
+            puntuacion += 1;
+        }
+//        else if(centroDisparo >= auxH *2 && centroDisparo < auxH*3
+//            || centroDisparo > auxH*9 && centroDisparo <= auxH*10){
+//            puntuacion+=2;
+//        }
+//        else if(centroDisparo >= auxH *3 && centroDisparo < auxH*4
+//            || centroDisparo > auxH*8 && centroDisparo <= auxH*9){
+//            puntuacion+=3;
+//        }
+//        else if(centroDisparo >= auxH *4 && centroDisparo < auxH*5
+//            || centroDisparo > auxH*7 && centroDisparo <= auxH*8){
+//            puntuacion+=4;
+//        }
+//        else if(centroDisparo >= auxH *5 && centroDisparo < auxH*6
+//                || centroDisparo >= auxH*6 && centroDisparo <= auxH*7){
+//            puntuacion+=5;
+//        }
+//        else if(dartPosXi/2){
+//
+//        }
+//        else if(dartPosXi/2){
+//
+//        }
+//        else if(dartPosXi/2){
+//
+//        }
+        //else falla y no pasa nada con los puntos
     }
 }

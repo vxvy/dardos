@@ -10,7 +10,7 @@
     <string name="ptd_time">"Time: "</string>
     <string name="ptd_spatk">Special Atack %:</string>
     <string name="ptd_sceenid">"Sceen id: "</string>
-    <string name="msg_gameover">Game Over</string>
+    <string name="msg_gameover">"Game ended, your puntuation is: "</string>
     <string name="btn_credits">Credits</string>
     <string name="btn_salir_si">Yes</string>
     <string name="btn_exit">Exit</string>

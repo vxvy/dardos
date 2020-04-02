@@ -27,6 +27,7 @@ public class EscenaEnPantalla extends SurfaceView implements SurfaceHolder.Callb
 
     public EsquemaEscena escena;
     public boolean funcionando = false;
+    public static int nuevaEscena;
 
     private int anchoPantalla = 1;
     private int altoPantalla = 1;
@@ -83,7 +84,7 @@ public class EscenaEnPantalla extends SurfaceView implements SurfaceHolder.Callb
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         synchronized (surfaceHolder) {
-            int nuevaEscena=escena.onTouchEvent(event);
+            nuevaEscena=escena.onTouchEvent(event);
             if(nuevaEscena!=escena.idEscena){
                 switch (nuevaEscena){
                     case Constantes.ESCENA_DIFICULTAD_VALUE:
@@ -108,7 +109,7 @@ public class EscenaEnPantalla extends SurfaceView implements SurfaceHolder.Callb
                         escena = new EscenaCreditos(context, nuevaEscena, anchoPantalla, altoPantalla);
                         break;
                     case Constantes.ESCENA_GAME_OVER:
-                        escena = new EscenaGameOver(context, nuevaEscena, anchoPantalla, altoPantalla);
+                        escena = new EscenaGameOver(context, nuevaEscena, anchoPantalla, altoPantalla, EscenaJuego.puntuacion);
                         break;
                     default:
                     case Constantes.ESCENA_MENU_VALUE:
