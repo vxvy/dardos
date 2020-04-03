@@ -23,8 +23,6 @@ public class EscenaCreditos extends EsquemaEscena {
     public int auxH;
     public int auxV;
 
-    public int scrollV;
-
     public String creditosJuego;
     public String creditosMusica;
     public String creditosSonidos;
@@ -33,21 +31,13 @@ public class EscenaCreditos extends EsquemaEscena {
     public String creditosProductor;
 
     public String creditos[];
+    public int creditosPos[];
 
     public Paint fontPaint;
 
     public EscenaCreditos(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
 
-        this.scrollV = 0;
-
-        this.auxH = anchoPantalla/7;
-        this.auxV = altoPantalla/24;
-
-        this.fontPaint = new Paint();
-        this.fontPaint.setTypeface(Typeface.createFromAsset(context.getAssets(),AssetsPaths.FONT_EPIC_PATH));
-        this.fontPaint.setTextSize(auxV);
-        this.fontPaint.setColor(context.getColor(R.color.letrasCreditos));
 
         this.creditosJuego = "Vanessa Cuartiella";
         this.creditosMusica = "www.wingless-seraph.net";
@@ -70,12 +60,24 @@ public class EscenaCreditos extends EsquemaEscena {
                 creditosImagenes2
         };
 
+        this.auxH = anchoPantalla/7;
+        this.auxV = altoPantalla/this.creditos.length;
+
+        this.creditosPos = new int[this.creditos.length];
+        for(int i = 0; i < creditosPos.length; i++){
+            this.creditosPos[i] = auxV*(i+1);
+        }
 
         this.bmFondo = RecursosCodigo.getBitmapFromAssets(context,AssetsPaths.BACKGROUND02_GREEN_PATH);
         bmFondo = Bitmap.createScaledBitmap(
                 bmFondo,
                 anchoPantalla,altoPantalla,
                 false);
+
+        this.fontPaint = new Paint();
+        this.fontPaint.setTypeface(Typeface.createFromAsset(context.getAssets(),AssetsPaths.FONT_EPIC_PATH));
+        this.fontPaint.setTextSize(altoPantalla/24);
+        this.fontPaint.setColor(context.getColor(R.color.letrasCreditos));
 
         MainActivity.mediaPlayer = MediaPlayer.create(context, R.raw.credits);
         int volumen = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
@@ -96,23 +98,18 @@ public class EscenaCreditos extends EsquemaEscena {
         );
 
         for(int i = 0; i<creditos.length; i++){
-            if((auxV*(i+1)+scrollV)>0){ //auxV determina la línea de créditos
-                                        //sumamos 1 al índice porque si usamos el 0 no se ve la línea
-                                        //se le añade el decremento para que salga de la pantalla eventualmente
-                c.drawText(creditos[i], auxH, auxV * (i + 1) + scrollV, fontPaint);
-            }else{                      //si se sale de la pantalla al dibujar
-//                c.drawText(creditos[i], auxH, auxV * (i + 1) + scrollV, fontPaint);
-            }
+            c.drawText(creditos[i], auxH, creditosPos[i], fontPaint);
         }
         super.escenaDibuja(c);
     }
 
     @Override
     public void escenaActFisicas() {
-        if(scrollV <= altoPantalla*-1){ //cuando scrollV sea menor que -1080
-            scrollV--;
-        }else{ //vuelve a ser 0
-            scrollV = 0;
+        for(int i = 0; i < creditosPos.length; i++){
+            creditosPos[i]--;
+            if(creditosPos[i]<=0){
+                creditosPos[i]=altoPantalla;
+            }
         }
         super.escenaActFisicas();
     }
