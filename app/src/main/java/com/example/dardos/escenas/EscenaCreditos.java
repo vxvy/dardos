@@ -6,6 +6,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 
 import com.example.dardos.R;
 import com.example.dardos.codeUtils.AssetsPaths;
@@ -51,6 +53,10 @@ public class EscenaCreditos extends EsquemaEscena {
                 bmFondo,
                 anchoPantalla,altoPantalla,
                 false);
+
+        mediaPlayer = MediaPlayer.create(context, R.raw.credits);
+        int volumen = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        mediaPlayer.setVolume(volumen/2,volumen/2);
     }
 
     @Override

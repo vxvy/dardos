@@ -54,11 +54,11 @@ public class Constantes {
 
     //velocidades
     public static final int DIFF_EASY = 1;
-    public static final int DIFF_EASY_VEL = 1;
+    public static final int DIFF_EASY_VEL = MainActivity.context.getResources().getDisplayMetrics().heightPixels/90;
     public static final int DIFF_MED = 2;
-    public static final int DIFF_MED_VEL = 2;
+    public static final int DIFF_MED_VEL = MainActivity.context.getResources().getDisplayMetrics().heightPixels/66;
     public static final int DIFF_HARD = 3;
-    public static final int DIFF_HARD_VEL = 3;
+    public static final int DIFF_HARD_VEL = MainActivity.context.getResources().getDisplayMetrics().heightPixels/25;
 
     public static final int VERTICAL_VEL = MainActivity.context.getResources().getDisplayMetrics().heightPixels/24;
 

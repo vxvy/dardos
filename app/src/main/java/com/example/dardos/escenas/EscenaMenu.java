@@ -6,6 +6,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.view.MotionEvent;
 
 import com.example.dardos.R;
@@ -89,6 +91,10 @@ public class EscenaMenu extends EsquemaEscena {
                 bmFondo,
                 anchoPantalla,altoPantalla,
                 false);
+
+        mediaPlayer = MediaPlayer.create(context, R.raw.mainmenu);
+        int volumen = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        mediaPlayer.setVolume(volumen/2,volumen/2);
     }
 
     @Override

@@ -6,6 +6,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -40,6 +44,9 @@ public class EscenaJuego extends EsquemaEscena {
     public float radCircle4; //
     public float radCircle5; //exterior
 
+    //Auxiliar para colorear
+    public boolean acierta[];
+
     //paint para todo_
     public Paint circlePaint;
 
@@ -57,6 +64,7 @@ public class EscenaJuego extends EsquemaEscena {
     public boolean dardoLanzar;
     public boolean finLanzamiento;
     public boolean aumentaX;
+    public boolean fallaDiana;
 
     //pos dardo
     public int dartPosXi;
@@ -76,6 +84,10 @@ public class EscenaJuego extends EsquemaEscena {
     public int numLanzamientos;
     public static int puntuacion;
 
+    //Sonidos
+    public SoundPool efectos;
+    public int dardoAcierta, dardoFalla, dardoLanza;
+
     public EscenaJuego(Context context, int idEscena, int anchoPantalla, int altoPantalla, int lvlDif) {
         super(context, idEscena, anchoPantalla, altoPantalla);
         this.context = context;
@@ -85,6 +97,7 @@ public class EscenaJuego extends EsquemaEscena {
         this.dardoMovH = true;
         this.dardoLanzar = false;
         this.finLanzamiento = true;
+        this.fallaDiana = false;
 
         //Velocidades
         switch (lvlDif){
@@ -117,8 +130,13 @@ public class EscenaJuego extends EsquemaEscena {
         this.radCircle2 = auxH*2;
         this.radCircle1 = auxH;
 
+        //indicador de qué círculo ha acertado
+        this.acierta = new boolean[]{false, false, false, false, false};
+
+        //paint genérico
         this.circlePaint = new Paint();
 
+        //elementos de juego
         this.dart = RecursosCodigo.getBitmapFromAssets(context,AssetsPaths.DART_BM);
         this.dart = Bitmap.createScaledBitmap(dart, auxH, auxH*2, false);
 
@@ -129,8 +147,24 @@ public class EscenaJuego extends EsquemaEscena {
 
         this.bmFondo = RecursosCodigo.getBitmapFromAssets(context,BACKGROUND03_MAINGAME_PATH);
         this.bmFondo = Bitmap.createScaledBitmap(bmFondo,anchoPantalla,altoPantalla,false);
+
+        mediaPlayer = MediaPlayer.create(context, R.raw.juego);
+        int volumen = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        mediaPlayer.setVolume(volumen/2,volumen/2);
+
+        SoundPool.Builder spb= new SoundPool.Builder();
+        spb.setAudioAttributes(new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA)                   .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build());
+        spb.setMaxStreams(2);
+        this.efectos=spb.build();
+
+        dardoLanza = efectos.load(context,R.raw.shoot,1);
+        dardoAcierta = efectos.load(context,R.raw.ding,1);
+        dardoFalla = efectos.load(context,R.raw.fail,1);
     }
 
+    /**
+     * Determina los puntos iniciales en que se dispondrá de la cruz y el dardo
+     */
     public void setInitialPosForEverything(){
         this.dartPosXi=(auxH*6)-(this.dart.getWidth()/2);
         this.dartPosXf=this.dartPosXi+dart.getWidth();
@@ -168,19 +202,39 @@ public class EscenaJuego extends EsquemaEscena {
         this.circlePaint = new Paint();
 
 //  Esto quedaría mucho mejor en un bucle, la verdad
-        this.circlePaint.setColor(context.getColor(R.color.diana5));
+        if(this.acierta[0]){
+            circlePaint.setColor(context.getColor(R.color.colisionYes));
+        }else {
+            this.circlePaint.setColor(context.getColor(R.color.diana5));
+        }
         c.drawCircle(auxH*6, auxV, radCircle5, circlePaint);
 
-        circlePaint.setColor(context.getColor(R.color.diana4));
+        if(this.acierta[1]){
+            circlePaint.setColor(context.getColor(R.color.colisionYes));
+        }else{
+            circlePaint.setColor(context.getColor(R.color.diana4));
+        }
         c.drawCircle(auxH*6, auxV, radCircle4, circlePaint);
 
-        circlePaint.setColor(context.getColor(R.color.diana3));
-        c.drawCircle(auxH*6, auxV, radCircle3, circlePaint);
+        if(this.acierta[2]) {
+            circlePaint.setColor(context.getColor(R.color.colisionYes));
+        }else{
+            circlePaint.setColor(context.getColor(R.color.diana3));
+        }
+        c.drawCircle(auxH * 6, auxV, radCircle3, circlePaint);
 
-        circlePaint.setColor(context.getColor(R.color.diana2));
-        c.drawCircle(auxH*6, auxV, radCircle2, circlePaint);
+        if(this.acierta[3]) {
+            circlePaint.setColor(context.getColor(R.color.colisionYes));
+        }else{
+            circlePaint.setColor(context.getColor(R.color.diana2));
+        }
+        c.drawCircle(auxH * 6, auxV, radCircle2, circlePaint);
 
-        circlePaint.setColor(context.getColor(R.color.diana1));
+        if(this.acierta[4]){
+            circlePaint.setColor(context.getColor(R.color.colisionYes));
+        }else{
+            circlePaint.setColor(context.getColor(R.color.diana1));
+        }
         c.drawCircle(auxH*6, auxV, radCircle1, circlePaint);
 
         c.drawBitmap(this.dart,
@@ -204,7 +258,10 @@ public class EscenaJuego extends EsquemaEscena {
      */
     @Override
     public int onTouchEvent(MotionEvent event) {
+        this.fallaDiana = false;
         if(event.getY() > auxV*2){
+            int volumen = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+            efectos.play(dardoLanza, volumen, volumen,1,0,1);
             this.dardoLanzar = true;
             this.finLanzamiento = false;
             this.dardoMovH = false;
@@ -221,14 +278,24 @@ public class EscenaJuego extends EsquemaEscena {
         if(dardoLanzar && !finLanzamiento && numLanzamientos > 0){
             this.dartPosYi-=velDardoY;
             this.dartPosYf-=velDardoY;
+
             if(this.dartPosYi <= (this.crossPosYf - this.dart.getHeight()/2)){
-                this.compruebaDisparo();
+//                this.compruebaDisparo();
+                //sonido
+                int volumen = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+                if(fallaDiana){
+                    efectos.play(dardoFalla, volumen, volumen,1,0,1);
+                }else{
+                    efectos.play(dardoAcierta, volumen, volumen,1,0,1);
+                }
+                //parámetros varios
                 this.finLanzamiento = true;
                 this.numLanzamientos--;
                 this.setInitialPosForEverything();
                 RecursosCodigo.espera(1000);
             }
         }else if(numLanzamientos > 0){
+            this.acierta = new boolean[]{false, false, false, false, false};
             if (aumentaX) {
                 this.dartPosXi += velDardoX;
                 this.dartPosXf += velDardoX;
@@ -250,9 +317,10 @@ public class EscenaJuego extends EsquemaEscena {
                     aumentaX = true;
                 }
             }
-        }else{
-
         }
+//        else{
+//
+//        }
     }
 
     public void compruebaDisparo(){
@@ -268,32 +336,31 @@ public class EscenaJuego extends EsquemaEscena {
         if(centroDisparo >= 0 && centroDisparo < auxH
             || centroDisparo > auxH*9 && centroDisparo <= auxH*10){
             puntuacion += 1;
+            this.acierta[0] = true;
         }
-//        else if(centroDisparo >= auxH *2 && centroDisparo < auxH*3
-//            || centroDisparo > auxH*9 && centroDisparo <= auxH*10){
-//            puntuacion+=2;
-//        }
-//        else if(centroDisparo >= auxH *3 && centroDisparo < auxH*4
-//            || centroDisparo > auxH*8 && centroDisparo <= auxH*9){
-//            puntuacion+=3;
-//        }
-//        else if(centroDisparo >= auxH *4 && centroDisparo < auxH*5
-//            || centroDisparo > auxH*7 && centroDisparo <= auxH*8){
-//            puntuacion+=4;
-//        }
-//        else if(centroDisparo >= auxH *5 && centroDisparo < auxH*6
-//                || centroDisparo >= auxH*6 && centroDisparo <= auxH*7){
-//            puntuacion+=5;
-//        }
-//        else if(dartPosXi/2){
-//
-//        }
-//        else if(dartPosXi/2){
-//
-//        }
-//        else if(dartPosXi/2){
-//
-//        }
-        //else falla y no pasa nada con los puntos
+        else if(centroDisparo >= auxH *1 && centroDisparo < auxH*2
+            || centroDisparo > auxH*8 && centroDisparo <= auxH*9){
+            puntuacion+=2;
+            this.acierta[1] = true;
+        }
+        else if(centroDisparo >= auxH *2 && centroDisparo < auxH*3
+            || centroDisparo > auxH*7 && centroDisparo <= auxH*8){
+            puntuacion+=3;
+            this.acierta[2] = true;
+        }
+        else if(centroDisparo >= auxH *3 && centroDisparo < auxH*4
+            || centroDisparo > auxH*6 && centroDisparo <= auxH*7){
+            puntuacion+=4;
+            this.acierta[3] = true;
+        }
+        else if(centroDisparo >= auxH *4 && centroDisparo < auxH*5
+                || centroDisparo >= auxH*5 && centroDisparo <= auxH*6){
+            puntuacion+=5;
+            this.acierta[4] = true;
+        }else{//falla
+            this.fallaDiana = true;
+        }
+
+//        this.escenaDibuja(auxC);
     }
 }

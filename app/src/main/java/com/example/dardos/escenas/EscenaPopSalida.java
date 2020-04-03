@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.view.MotionEvent;
 
 import com.example.dardos.MainActivity;
@@ -71,6 +73,10 @@ public class EscenaPopSalida extends EsquemaEscena {
         fontPaint.setTextSize(auxV);
 
         rectanguloContenedor = new Rect(auxH, auxV,auxH*4, auxV*6);
+
+        mediaPlayer = MediaPlayer.create(context, R.raw.salir);
+        int volumen = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        mediaPlayer.setVolume(volumen/2,volumen/2);
     }
 
     @Override

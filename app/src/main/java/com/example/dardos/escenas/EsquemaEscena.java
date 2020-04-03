@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -12,6 +14,7 @@ import com.example.dardos.codeUtils.Constantes;
 import com.example.dardos.codeUtils.RecursosCodigo;
 import com.example.dardos.elementos.Boton;
 
+import static com.example.dardos.codeUtils.AssetsPaths.BTNBACK_PATH;
 import static com.example.dardos.codeUtils.AssetsPaths.LOGO_PATH;
 
 public class EsquemaEscena {
@@ -22,20 +25,25 @@ public class EsquemaEscena {
     public Boton btnAtras;
     public Bitmap bmLogoBtnAtras;
 
+    public AudioManager audioManager;
+    public MediaPlayer mediaPlayer;
+
     public EsquemaEscena(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         this.context = context;
         this.idEscena = idEscena;
         this.anchoPantalla = anchoPantalla;
         this.altoPantalla = altoPantalla;
 
-        this.bmLogoBtnAtras = RecursosCodigo.getBitmapFromAssets(context, LOGO_PATH);
+        this.bmLogoBtnAtras = RecursosCodigo.getBitmapFromAssets(context, BTNBACK_PATH);
         this.btnAtras = new Boton(
                 anchoPantalla - anchoPantalla/9,
                 0,
                 anchoPantalla,
                 anchoPantalla/9,
-                Color.WHITE, true, bmLogoBtnAtras, Constantes.ESCENA_MENU_VALUE
+                Color.TRANSPARENT, false, bmLogoBtnAtras, Constantes.ESCENA_MENU_VALUE
         );
+
+        audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
     }
 
     public void escenaDibuja(Canvas c){
