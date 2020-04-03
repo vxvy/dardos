@@ -95,24 +95,23 @@ public class EscenaCreditos extends EsquemaEscena {
                 null
         );
 
-//        for(int i = 0; i<creditos.length; i++){
-//            if((auxV+scrollV)>0){
-//                c.drawText(creditos[i], auxH, auxV + (scrollV * (i + 1)), fontPaint);
-//            }else{
-//
-//            }
-//        }
-
-        c.drawText(creditos[i], auxH, auxV + (scrollV * (i + 1)), fontPaint);
-
+        for(int i = 0; i<creditos.length; i++){
+            if((auxV*(i+1)+scrollV)>0){ //auxV determina la línea de créditos
+                                        //sumamos 1 al índice porque si usamos el 0 no se ve la línea
+                                        //se le añade el decremento para que salga de la pantalla eventualmente
+                c.drawText(creditos[i], auxH, auxV * (i + 1) + scrollV, fontPaint);
+            }else{                      //si se sale de la pantalla al dibujar
+//                c.drawText(creditos[i], auxH, auxV * (i + 1) + scrollV, fontPaint);
+            }
+        }
         super.escenaDibuja(c);
     }
 
     @Override
     public void escenaActFisicas() {
-        if(scrollV>altoPantalla*-1){
+        if(scrollV <= altoPantalla*-1){ //cuando scrollV sea menor que -1080
             scrollV--;
-        }else {
+        }else{ //vuelve a ser 0
             scrollV = 0;
         }
         super.escenaActFisicas();
