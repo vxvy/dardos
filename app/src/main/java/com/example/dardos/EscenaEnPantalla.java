@@ -45,6 +45,7 @@ public class EscenaEnPantalla extends SurfaceView implements SurfaceHolder.Callb
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+
         hilo.setFuncionando(true); // Se le indica al hilo que puede arrancar
         if (hilo.getState() == Thread.State.NEW) hilo.start(); // si el hilo no ha sido creado se crea;
         if (hilo.getState() == Thread.State.TERMINATED) {      // si el hilo ha sido finalizado se crea de nuevo;

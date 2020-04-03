@@ -261,13 +261,15 @@ public class EscenaJuego extends EsquemaEscena {
     @Override
     public int onTouchEvent(MotionEvent event) {
         this.fallaDiana = false;
-        if(event.getY() > auxV*2){
-            int volumen = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-            efectos.play(dardoLanza, volumen, volumen,1,0,1);
-            this.dardoLanzar = true;
-            this.finLanzamiento = false;
-            this.dardoMovH = false;
-            compruebaDisparo();
+        if(event.getActionMasked() == MotionEvent.ACTION_UP){
+            if(event.getY() > auxV*2){
+                int volumen = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+                efectos.play(dardoLanza, volumen, volumen,1,0,1);
+                this.dardoLanzar = true;
+                this.finLanzamiento = false;
+                this.dardoMovH = false;
+                compruebaDisparo();
+            }
         }
 
         if(numLanzamientos <= 0){
