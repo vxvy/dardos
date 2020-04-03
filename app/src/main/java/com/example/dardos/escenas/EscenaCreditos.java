@@ -8,7 +8,9 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.view.MotionEvent;
 
+import com.example.dardos.MainActivity;
 import com.example.dardos.R;
 import com.example.dardos.codeUtils.AssetsPaths;
 import com.example.dardos.codeUtils.RecursosCodigo;
@@ -25,14 +27,19 @@ public class EscenaCreditos extends EsquemaEscena {
 
     public String creditosJuego;
     public String creditosMusica;
+    public String creditosSonidos;
     public String creditosImagenes1;
     public String creditosImagenes2;
     public String creditosProductor;
+
+    public String creditos[];
 
     public Paint fontPaint;
 
     public EscenaCreditos(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
+
+        this.scrollV = 0;
 
         this.auxH = anchoPantalla/7;
         this.auxV = altoPantalla/24;
@@ -44,9 +51,25 @@ public class EscenaCreditos extends EsquemaEscena {
 
         this.creditosJuego = "Vanessa Cuartiella";
         this.creditosMusica = "www.wingless-seraph.net";
+        this.creditosSonidos = "soundbible.com";
         this.creditosImagenes1 = "Vanessa Cuartiella";
-        this.creditosImagenes2 = "www.pexels.com/";
+        this.creditosImagenes2 = "www.pexels.com";
         this.creditosProductor = "Javier Conde";
+
+        this.creditos = new String[]{
+                context.getString(R.string.credits_author),
+                creditosJuego,
+                context.getString(R.string.credits_music),
+                creditosMusica,
+                context.getString(R.string.credits_effects),
+                creditosSonidos,
+                context.getString(R.string.credits_productor),
+                creditosProductor,
+                context.getString(R.string.credits_images),
+                creditosImagenes1,
+                creditosImagenes2
+        };
+
 
         this.bmFondo = RecursosCodigo.getBitmapFromAssets(context,AssetsPaths.BACKGROUND02_GREEN_PATH);
         bmFondo = Bitmap.createScaledBitmap(
@@ -54,9 +77,11 @@ public class EscenaCreditos extends EsquemaEscena {
                 anchoPantalla,altoPantalla,
                 false);
 
-        mediaPlayer = MediaPlayer.create(context, R.raw.credits);
+        MainActivity.mediaPlayer = MediaPlayer.create(context, R.raw.credits);
         int volumen = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        mediaPlayer.setVolume(volumen/2,volumen/2);
+        MainActivity.mediaPlayer.setVolume(volumen/2,volumen/2);
+        MainActivity.mediaPlayer.isLooping();
+        MainActivity.mediaPlayer.start();
     }
 
     @Override
@@ -70,21 +95,31 @@ public class EscenaCreditos extends EsquemaEscena {
                 null
         );
 
-        c.drawText( context.getString(R.string.credits_author),auxH, auxV*2, fontPaint);
-        c.drawText(creditosJuego, auxH, auxV*4, fontPaint);
-        c.drawText( context.getString(R.string.credits_music),auxH, auxV*6, fontPaint);
-        c.drawText(creditosMusica, auxH, auxV*8, fontPaint);
-        c.drawText( context.getString(R.string.credits_images),auxH, auxV*10, fontPaint);
-        c.drawText(creditosImagenes1, auxH, auxV*12, fontPaint);
-        c.drawText(creditosImagenes2, auxH, auxV*14, fontPaint);
-        c.drawText( context.getString(R.string.credits_productor),auxH, auxV*16, fontPaint);
-        c.drawText(creditosProductor, auxH, auxV*18, fontPaint);
+//        for(int i = 0; i<creditos.length; i++){
+//            if((auxV+scrollV)>0){
+//                c.drawText(creditos[i], auxH, auxV + (scrollV * (i + 1)), fontPaint);
+//            }else{
+//
+//            }
+//        }
+
+        c.drawText(creditos[i], auxH, auxV + (scrollV * (i + 1)), fontPaint);
 
         super.escenaDibuja(c);
     }
 
     @Override
     public void escenaActFisicas() {
+        if(scrollV>altoPantalla*-1){
+            scrollV--;
+        }else {
+            scrollV = 0;
+        }
         super.escenaActFisicas();
+    }
+
+    @Override
+    public int onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
     }
 }

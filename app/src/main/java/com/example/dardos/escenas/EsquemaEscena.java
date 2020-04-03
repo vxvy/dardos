@@ -9,6 +9,7 @@ import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import com.example.dardos.MainActivity;
 import com.example.dardos.R;
 import com.example.dardos.codeUtils.Constantes;
 import com.example.dardos.codeUtils.RecursosCodigo;
@@ -26,7 +27,6 @@ public class EsquemaEscena {
     public Bitmap bmLogoBtnAtras;
 
     public AudioManager audioManager;
-    public MediaPlayer mediaPlayer;
 
     public EsquemaEscena(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         this.context = context;
@@ -67,6 +67,7 @@ public class EsquemaEscena {
             case MotionEvent.ACTION_UP:                     // Al levantar el último dedo
             case MotionEvent.ACTION_POINTER_UP:  // Al levantar un dedo que no es el último
                 if(btnAtras.pulsaBoton(event) && this.idEscena!=Constantes.ESCENA_MENU_VALUE){
+                    MainActivity.mediaPlayer.pause();
                     return Constantes.ESCENA_MENU_VALUE;
                 }
                 break;

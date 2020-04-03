@@ -14,11 +14,12 @@
     <string name="btn_credits">Credits</string>
     <string name="btn_salir_si">Yes</string>
     <string name="btn_exit">Exit</string>
-    <string name="credits_author">Author</string>
+    <string name="credits_author">Author:</string>
     <string name="credits_music">Musical source:</string>
     <string name="credits_images">Graphic sources:</string>
     <string name="diff_title">Select difficulty:</string>
     <string name="diff_easy">Easy</string>
     <string name="diff_med">Medium</string>
     <string name="diff_hard">Hard</string>
+    <string name="credits_effects">Sound effects:</string>
 </resources>

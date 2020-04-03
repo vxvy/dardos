@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -11,8 +12,8 @@ import android.view.Window;
 public class MainActivity extends AppCompatActivity {
 
     public static Context context;
-    public static boolean musica;
-    public static float duracionPartida;
+    public static boolean pausa;
+    public static MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +35,8 @@ public class MainActivity extends AppCompatActivity {
 
         this.context = this;
 
-        //Datos partida
-        this.duracionPartida = 0f;
-
         //Opciones
-        this.musica = true;
+        pausa = false;
 
         EscenaEnPantalla contenedorSurfaceView = new EscenaEnPantalla(this);
         contenedorSurfaceView.setKeepScreenOn(true);
@@ -48,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if(pausa){
+            mediaPlayer.start();
+        }
         //Se quita el getWindow porque no hace falta en el onResume
         try{
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -66,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        pausa = true;
+        mediaPlayer.pause();
     }
 
     @Override

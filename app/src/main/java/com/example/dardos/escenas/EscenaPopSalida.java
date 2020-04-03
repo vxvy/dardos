@@ -74,9 +74,10 @@ public class EscenaPopSalida extends EsquemaEscena {
 
         rectanguloContenedor = new Rect(auxH, auxV,auxH*4, auxV*6);
 
-        mediaPlayer = MediaPlayer.create(context, R.raw.salir);
+        MainActivity.mediaPlayer = MediaPlayer.create(context, R.raw.salir);
         int volumen = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        mediaPlayer.setVolume(volumen/2,volumen/2);
+        MainActivity.mediaPlayer.setVolume(volumen/2,volumen/2);
+        MainActivity.mediaPlayer.start();
     }
 
     @Override
@@ -97,10 +98,12 @@ public class EscenaPopSalida extends EsquemaEscena {
         if(event.getActionMasked() == MotionEvent.ACTION_UP){
             for(Boton b:arlBotonnes){
                 if(b.pulsaBoton(event) && b.btnValor == BTN_SALIDA_YES_ID){
+                    MainActivity.mediaPlayer.pause();
                     ((Activity)context).finish();
                 }
 //                else if(b.pulsaBoton(event) && b.btnValor == BTN_SALIDA_NO_ID){
                 else{
+                    MainActivity.mediaPlayer.pause();
                     return ESCENA_MENU_VALUE;
                 }
             }

@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 import com.example.dardos.EscenaEnPantalla;
+import com.example.dardos.MainActivity;
 import com.example.dardos.R;
 import com.example.dardos.codeUtils.AssetsPaths;
 import com.example.dardos.codeUtils.Constantes;
@@ -148,9 +149,10 @@ public class EscenaJuego extends EsquemaEscena {
         this.bmFondo = RecursosCodigo.getBitmapFromAssets(context,BACKGROUND03_MAINGAME_PATH);
         this.bmFondo = Bitmap.createScaledBitmap(bmFondo,anchoPantalla,altoPantalla,false);
 
-        mediaPlayer = MediaPlayer.create(context, R.raw.juego);
+        MainActivity.mediaPlayer = MediaPlayer.create(context, R.raw.juego);
         int volumen = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        mediaPlayer.setVolume(volumen/2,volumen/2);
+        MainActivity.mediaPlayer.setVolume(volumen/2,volumen/2);
+        MainActivity.mediaPlayer.start();
 
         SoundPool.Builder spb= new SoundPool.Builder();
         spb.setAudioAttributes(new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA)                   .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build());
@@ -265,9 +267,11 @@ public class EscenaJuego extends EsquemaEscena {
             this.dardoLanzar = true;
             this.finLanzamiento = false;
             this.dardoMovH = false;
+            compruebaDisparo();
         }
 
         if(numLanzamientos <= 0){
+            MainActivity.mediaPlayer.pause();
             return ESCENA_GAME_OVER;
         }
         return super.onTouchEvent(event);
@@ -293,9 +297,9 @@ public class EscenaJuego extends EsquemaEscena {
                 this.numLanzamientos--;
                 this.setInitialPosForEverything();
                 RecursosCodigo.espera(1000);
+                this.acierta = new boolean[]{false, false, false, false, false};
             }
         }else if(numLanzamientos > 0){
-            this.acierta = new boolean[]{false, false, false, false, false};
             if (aumentaX) {
                 this.dartPosXi += velDardoX;
                 this.dartPosXf += velDardoX;
@@ -318,9 +322,6 @@ public class EscenaJuego extends EsquemaEscena {
                 }
             }
         }
-//        else{
-//
-//        }
     }
 
     public void compruebaDisparo(){

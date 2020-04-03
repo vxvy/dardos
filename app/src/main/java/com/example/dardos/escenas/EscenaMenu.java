@@ -10,6 +10,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.view.MotionEvent;
 
+import com.example.dardos.MainActivity;
 import com.example.dardos.R;
 import com.example.dardos.codeUtils.AssetsPaths;
 import com.example.dardos.codeUtils.RecursosCodigo;
@@ -92,9 +93,11 @@ public class EscenaMenu extends EsquemaEscena {
                 anchoPantalla,altoPantalla,
                 false);
 
-        mediaPlayer = MediaPlayer.create(context, R.raw.mainmenu);
+        MainActivity.mediaPlayer = MediaPlayer.create(context, R.raw.mainmenu);
         int volumen = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        mediaPlayer.setVolume(volumen/2,volumen/2);
+        MainActivity.mediaPlayer.setVolume(volumen/2,volumen/2);
+        MainActivity.mediaPlayer.isLooping();
+        MainActivity.mediaPlayer.start();
     }
 
     @Override
@@ -114,6 +117,7 @@ public class EscenaMenu extends EsquemaEscena {
             case MotionEvent.ACTION_POINTER_UP:
                 for(Boton b : btnColection){
                     if(b.pulsaBoton(event)){
+                        MainActivity.mediaPlayer.pause();
                         return b.btnValor;
                     }
                 }
